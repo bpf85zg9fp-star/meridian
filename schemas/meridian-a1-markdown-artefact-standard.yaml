@@ -1,0 +1,151 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "meridian-a1-markdown-artefact-standard"
+title: "Meridian A1 Markdown Artefact Standard"
+description: "YAML schema defining all required and optional frontmatter fields for Meridian governance documents"
+version: "1.1"
+
+type: object
+required:
+  - document_id
+  - title
+  - version
+  - status
+  - classification
+  - date
+  - programme
+  - author
+properties:
+  document_id:
+    type: string
+    pattern: "^(RFQ|RIP|REPO|REPO-STATUS|REV-L2A|REV-L2B|REV-L3)-\\d{4}$|^REV-([L2A|L2B|L3])-\\d{4}-\\d{3}$"
+    description: "Unique document identifier following Meridian taxonomy"
+    examples:
+      - "RFQ-0100"
+      - "RIP-003A"
+      - "REV-L2A-RFQ-0100-001"
+
+  title:
+    type: string
+    minLength: 10
+    maxLength: 200
+    description: "Document title in plain text (sentence case preferred)"
+
+  version:
+    type: string
+    pattern: "^\\d+\\.\\d+([\\.\\d]+)?$"
+    description: "Semantic versioning (e.g. 0.1, 1.0, 1.2.3)"
+    examples:
+      - "0.1"
+      - "1.0"
+      - "1.2.3"
+
+  status:
+    type: string
+    enum:
+      - "Draft"
+      - "Submitted for Review"
+      - "In Review"
+      - "Reviewed — Conditional Approval"
+      - "Reviewed — Approved"
+      - "Approved"
+      - "Published"
+      - "Deprecated"
+      - "Superseded"
+    description: "Current document lifecycle status"
+
+  classification:
+    type: string
+    description: "Document classification category"
+    examples:
+      - "Governance / Repository Definition"
+      - "Governance / Independent Review"
+      - "Technical / Implementation"
+      - "Operational / Procedure"
+
+  date:
+    type: string
+    pattern: "^\\d{4}-\\d{2}-\\d{2}$"
+    description: "Document creation or last major revision date (YYYY-MM-DD)"
+
+  effective_date:
+    type: string
+    pattern: "^\\d{4}-\\d{2}-\\d{2}$"
+    description: "Date the document becomes effective (optional, defaults to date if omitted)"
+
+  programme:
+    type: string
+    enum:
+      - "Meridian"
+    description: "Programme to which this document belongs"
+
+  author:
+    type: string
+    description: "Primary drafter or drafting role"
+    examples:
+      - "ChatGPT (Layer 1 Governance Drafting Role)"
+      - "Human Author Name"
+
+  revised_by:
+    type: string
+    description: "Person/role who performed the latest revision (optional)"
+
+  review_stage:
+    type: string
+    description: "Current stage in the governance pipeline"
+    examples:
+      - "Pending Layer 2B and Layer 3 Review"
+      - "Completed — Forwarding to Layer 3"
+      - "Completed — Approved"
+
+  yaml_schema:
+    type: string
+    description: "Reference to the YAML schema version used"
+
+  document_taxonomy:
+    type: string
+    description: "High-level taxonomy category"
+    examples:
+      - "RFQ-XXXX Requirements and Framework Standards"
+
+  tags:
+    type: array
+    items:
+      type: string
+    description: "Optional keywords for searchability and filtering"
+
+  related_documents:
+    type: array
+    items:
+      type: string
+    description: "List of related document identifiers or titles"
+    minItems: 0
+
+  continuum_scope:
+    type: object
+    description: "Continuum governance scope metadata (optional)"
+    required:
+      - included
+      - description
+    properties:
+      included:
+        type: boolean
+      description:
+        type: string
+
+  authority:
+    type: object
+    description: "Authority and approval metadata (optional)"
+    required:
+      - approver
+      - approval_required
+    properties:
+      approver:
+        type: string
+      approval_required:
+        type: boolean
+      criteria:
+        type: string
+      reference:
+        type: string
+
+additionalProperties: false
