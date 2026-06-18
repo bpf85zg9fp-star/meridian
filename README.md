@@ -1,19 +1,20 @@
 # Meridian Governance Repository
 
-**Single Source of Truth** for all Meridian governance documents, RFQs, policies, and decisions.
+**Single Authoritative Source of Truth** for all Meridian programme governance artefacts, RFQs, standards, decisions, and operational documentation.
 
-**Status:** Operational as of 2026-06-11  
-**GUIDE-GITHUB-MERIDIAN-SETUP-001 v1.5** — Approved by Kevin Slade
+**Status:** Fully operational per RFQ-0100 v0.2 (Approved by Kevin — Estate Principal on 2026-06-15)
 
-## Quick Navigation
+**This repository (`bpf85zg9fp-star/meridian`) is the only one that should exist.**
 
-- `GUIDE-GITHUB-MERIDIAN-SETUP-001.md` — How to use this repository
-- `CHANGELOG.md` — History of changes
-- `DECISIONS/Decision-Log.md` — All major decisions
-- `GOVERNANCE/` — Core governance documents
-- `RFQ/` — Requests for Quotation
-- `REVIEW_PIPELINE/` — Review processes
+`meridian-governance` is deprecated and scheduled for archival.
 
----
+## Approved Repository Structure
 
-**Repository is now live.**
+Refer to `rfq/RFQ-0100.md` for the definitive standard.
+
+## Quick Start
+- `rfq/RFQ-0100.md`
+- `schemas/meridian-a1-markdown-artefact-standard.yaml`
+- Update all documents to use correct frontmatter.
+
+**Migration from old structure complete.**
