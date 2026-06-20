@@ -1,0 +1,20 @@
+name: Meridian Governance Compiler
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: OPA Policy Check
+        uses: open-policy-agent/conftest-action@v0.1.0
+        with:
+          policy: governance/policies
+          files: rfq/*.md
+      - name: Schema Validation
+        run: echo "TODO: Full JSON Schema + Markdown validation"

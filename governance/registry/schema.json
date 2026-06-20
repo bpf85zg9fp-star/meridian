@@ -1,1 +1,10 @@
-{ "type": "object", ... }
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["requirement_id", "title", "source_document", "owner", "status", "version", "created_date", "depends_on", "evaluation_criteria", "rtm_reference", "schema_version"],
+  "properties": {
+    "requirement_id": {"type": "string"},
+    "title": {"type": "string"},
+    "source_document": {"type": "string"}
+  }
+}
