@@ -1,0 +1,66 @@
+name: Meridian Governance CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  governance-validation:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies (minimal)
+        run: |
+          python -m pip install --upgrade pip
+
+      # -----------------------------
+      # RFQ → RIP Contract Validation
+      # -----------------------------
+      - name: RFQ → RIP contract validation
+        run: |
+          echo "Running RFQ-RIP contract validation..."
+          if [ -f scripts/validate_contract.py ]; then
+            python scripts/validate_contract.py
+          else
+            echo "WARNING: Contract validator not yet implemented"
+          fi
+
+      # -----------------------------
+      # Schema Enforcement Gate
+      # -----------------------------
+      - name: Schema enforcement gate
+        run: |
+          echo "Running schema enforcement..."
+          if [ -f scripts/validate_schemas.py ]; then
+            python scripts/validate_schemas.py
+          else
+            echo "WARNING: Schema validator not yet implemented"
+          fi
+
+      # -----------------------------
+      # RTM Graph Validation
+      # -----------------------------
+      - name: RTM graph validation
+        run: |
+          echo "Running RTM graph validation..."
+          if [ -f scripts/rtm_graph.py ]; then
+            python scripts/rtm_graph.py --validate
+          else
+            echo "WARNING: RTM engine not yet implemented"
+          fi
+
+      # -----------------------------
+      # Final Governance Summary
+      # -----------------------------
+      - name: Governance summary
+        run: |
+          echo "Meridian CI completed"
+          echo "NOTE: This is a bootstrap enforcement layer (non-blocking until full implementation)."
