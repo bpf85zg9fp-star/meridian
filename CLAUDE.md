@@ -17,8 +17,22 @@
 5. **RFQ-0001** — Core System Requirements Template
    - Direct URL: https://github.com/bpf85zg9fp-star/meridian/blob/main/rfq/RFQ-0001.md
 
+6. **LLM-CONTEXT.md** — Consolidated fallback context
+   - Direct URL: https://github.com/bpf85zg9fp-star/meridian/blob/main/LLM-CONTEXT.md
+
 ## Programme Intelligence
 - Estate Principal: Kevin Slade
 - Repository consolidated 2026-06-19 from deprecated `meridian-governance`
 
 Follow the pipeline strictly. Apply A1 standard. Use atomic requirements.
+
+## GitHub Connector Troubleshooting (Token Issues)
+
+**Common Issues**: PERMISSION_DENIED even on public repos.
+
+**Solutions**:
+- Paste LLM-CONTEXT.md when connector fails.
+- PATs rarely work when pasted in chat — use OAuth linking or tools like Cursor.
+- Ask user for specific file contents as needed.
+
+**Always begin responses with**: "Following Meridian governance..."
