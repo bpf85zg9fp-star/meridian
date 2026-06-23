@@ -1,0 +1,24 @@
+name: Agent Arbitration Layer
+
+on:
+  push:
+    branches: [main, "draft/*"]
+  pull_request:
+
+jobs:
+  arbitration:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Resolve agent queue
+        run: |
+          python -c "from scripts.agent_arbitration import AgentArbitration; arb=AgentArbitration(); print(arb.resolve())"
+
+      - name: Arbitration status
+        run: echo "Agent arbitration evaluation complete"
