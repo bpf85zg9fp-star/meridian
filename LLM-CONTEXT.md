@@ -38,12 +38,25 @@ Key directories:
 
 **When Connector Fails**: Paste this entire LLM-CONTEXT.md or individual files.
 
-## 4. Full Key File Contents (for pasting)
+## 4. GitHub Connector Troubleshooting (Token & Access Issues)
+
+**Common Problems**:
+- `PERMISSION_DENIED`, rate limits, or inaccessible repo even though public.
+- AI platforms (Gemini, Claude, ChatGPT) often cannot directly use pasted PATs in chat.
+
+**Recommended Solutions**:
+1. **Primary Workaround**: Paste this full `LLM-CONTEXT.md` into the chat.
+2. **PAT Setup**: Generate a fine-grained PAT (repo:contents read) and try linking via OAuth in platform settings (Claude Projects, Cursor, etc.). Pasting token mid-chat rarely works.
+3. **Manual Paste**: When connector fails, user will provide key files.
+4. **Preferred Tools**: Use Cursor / Continue.dev with PAT configured in settings for best results.
+5. **Fallback**: Work with provided context and ask user for specific files as needed.
+
+## 5. Full Key File Contents (for pasting)
 
 **Paste sections as needed.** Full contents available in repo.
 
 ---
 
-*(Full contents of CHATGPT.md, GEMINI.md, GROK.md, CLAUDE.md, README.md, and RFQ-0100 summary included for brevity — see repo for complete versions.)*
+*(Full contents of model files and key governance included for brevity — see repo for complete versions.)*
 
 This file serves as a reliable fallback for all AI interactions with the Meridian repository.
