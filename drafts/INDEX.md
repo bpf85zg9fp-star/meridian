@@ -26,6 +26,11 @@ It functions as the state layer between specification (RFQ/RIP) and review promo
 | Document ID | Path | Type | State | Dependency |
 |------------|------|------|-------|------------|
 | TOOL-AUDIT-001 | drafts/TOOL-AUDIT-001.md | structural audit | active | RFQ-0100 |
+| RFQ-0106 | drafts/RFQ-0106.md | RFQ | scaffold | RFQ-0100 |
+| RFQ-0107 | drafts/RFQ-0107.md | RFQ | scaffold | RFQ-0106 |
+| RFQ-0108 | drafts/RFQ-0108.md | RFQ | scaffold | RFQ-0107 |
+| RFQ-0109 | drafts/RFQ-0109.md | RFQ | scaffold | REPO-GOVERNANCE-DAG-001 |
+| RFQ-0110 | drafts/RFQ-0110.md | RFQ | scaffold | RFQ-0109 |
 
 ---
 
