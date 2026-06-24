@@ -4,7 +4,7 @@ import json
 import re
 from pathlib import Path
 
-RE_EVENT = re.compile(r"(DocumentCreated|ReviewRequested|ReviewCompleted|DecisionRecorded|DocumentApproved|DocumentRejected|DocumentArchived|ReviewRequested|GrokConsolidation)")
+RE_EVENT = re.compile(r"(DocumentCreated|ReviewRequested|ReviewCompleted|DecisionRecorded|DocumentApproved|DocumentRejected|DocumentArchived|GrokConsolidation)")
 RE_REQ = re.compile(r"RFQ-\d{4}|RIP-\d{3}[A-Z]?")
 RE_DOC = re.compile(r"document_id:\s*[\"']?([A-Z0-9-]+)[\"']?", re.I)
 
