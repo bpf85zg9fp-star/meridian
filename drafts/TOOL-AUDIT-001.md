@@ -1,12 +1,15 @@
 # TOOL-AUDIT-001 — Repository Structure Audit
 
 ## Branch
+
 draft/tool-audit-20260623
 
 ## Scope
+
 Initial structural reconnaissance of Meridian repository for pipeline alignment, governance conformance, and A1 schema readiness.
 
 ## Observed Top-Level Structure
+
 Based on repository inspection:
 
 - `/rfq/`
@@ -27,6 +30,7 @@ Based on repository inspection:
   - RIP-* governance documents
 
 ## Governance Layers Identified
+
 1. Model onboarding layer
    - CHATGPT.md
    - CLAUDE.md
@@ -44,15 +48,18 @@ Based on repository inspection:
    - GitHub Actions governance compiler workflow
 
 ## Structural Risks / Observations
-- No explicit /drafts/ registry observed.
+
+- No explicit /drafts registry observed.
 - Governance compiler exists but dependency graph enforcement not fully explicit.
 - Canonical mapping not yet explicitly enforced as a graph edge system.
 
 ## Proposed Next Actions
+
 1. Create /drafts registry index (A1 compliant)
 2. Formalize RFQ-0100 → RIP dependency graph
 3. Bind schema validation into CI gate enforcement
 4. Define PR-level staging protocol for all A1 artefacts
 
 ## Status
-Draft committed to working branch for review pipeline integration.
+
+Draft committed to repository drafts directory for staging and review.
