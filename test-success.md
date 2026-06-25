@@ -1,0 +1,1 @@
+ChatGPT MCP test successful on 2026-06-25 via Grok-guided setup
