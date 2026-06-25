@@ -1,8 +1,9 @@
 ---
-document_id: "A1-CONSOLIDATED-HANDOFF-001"
+document_id: "REPO-0101"
 title: "A1 Consolidated Governance Handoff Package"
 version: "0.1"
 status: "Draft"
+classification: "Governance / Repository Definition"
 date: "2026-06-25"
 programme: "Meridian"
 author: "ChatGPT (Layer 1)"
