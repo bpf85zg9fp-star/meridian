@@ -49,7 +49,7 @@ Based on repository inspection:
 
 ## Structural Risks / Observations
 
-- No explicit /drafts registry observed.
+- /drafts registry has been established (resolved via drafts/INDEX.md).
 - Governance compiler exists but dependency graph enforcement not fully explicit.
 - Canonical mapping not yet explicitly enforced as a graph edge system.
 
