@@ -1,11 +1,15 @@
-# RIP-00XX — MCP Connector Setup & Validation
+---
+document_id: "RIP-0000"
+title: "MCP Connector Setup & Validation"
+version: "0.1"
+status: "Draft"
+classification: "Operational / Procedure"
+date: "2026-06-25"
+programme: "Meridian"
+author: "Grok (Layer 3 Consolidation)"
+---
 
-## Metadata
-- **Document ID:** RIP-00XX-MCP-Connector-Setup
-- **Date:** 2026-06-25
-- **Status:** Draft
-- **Scope:** Multi-agent MCP connector integration validation (ChatGPT / Claude / Grok)
-- **Repository Path:** `draft/RIP-00XX-MCP-Connector-Setup.md`
+# RIP-0000 — MCP Connector Setup & Validation
 
 ---
 
