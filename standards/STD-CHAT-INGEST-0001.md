@@ -1,0 +1,1 @@
+updated A1 version with ingestion notes

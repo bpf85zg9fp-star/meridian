@@ -1,0 +1,1 @@
+full extracted A1 document from chats
