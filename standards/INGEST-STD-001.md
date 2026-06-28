@@ -1,7 +1,7 @@
 ---
 document_id: "INGEST-STD-001"
 title: "Meridian Knowledge Base — Conversation Export Ingestion Standard"
-version: "1.0"
+version: "1.1"
 status: "Draft"
 classification: "Infrastructure / Standards"
 date: "2026-06-28"
@@ -13,165 +13,174 @@ note: "Document ID INGEST-STD-001 is provisional pending formal standards namesp
 
 # INGEST-STD-001 — Conversation Export Ingestion Standard
 
-## 1. Purpose
-
-This standard governs the ingestion of ChatGPT conversation export JSON files into the Meridian Knowledge Base and the extraction of A1-compliant governance artefacts from those exports into the formal programme pipeline.
-
----
-
-## 2. Scope
-
-Applies to all ChatGPT JSON conversation export files provided by the Estate Principal. Currently 40 files are expected (batches 000–039). This standard applies to all pipeline agents (L1 ChatGPT, L2A Claude, L2B Gemini, L3 Grok) performing ingestion or extraction work.
-
----
-
-## 3. Directory Structure
-
-The `knowledge/` directory is the authoritative intake and archive layer. It sits outside the governance artefact namespaces (`rfq/`, `rip/`, `drafts/`, `reviews/`).
-
-```
-knowledge/
-  README.md
-  INGESTION-MANIFEST.md                          ← Master tracker for all 40 batches
-  raw-exports/
-    chatgpt/
-      export-<YYYY-MM-DD>/
-        BATCH-NNN-STATUS.md                      ← Required for every batch
-        [conversations-NNN.json]                 ← Optional — see §5
-```
-
-Extracted artefacts are placed in:
-```
-drafts/<document_id>/<document_id>.md            ← Per RFQ-0100 §6
-```
-On branches named `draft/<document_id>`.
-
----
-
-## 4. Batch Numbering
-
-Each conversation export file is assigned a three-digit batch number matching its filename suffix:
-- `conversations-000.json` → Batch 000
-- `conversations-001.json` → Batch 001
-- (etc.)
-
-Batch numbers are tracked in `knowledge/INGESTION-MANIFEST.md`.
-
----
-
-## 5. Raw Export Handling
-
-Raw JSON exports **should not** be committed to the repository by default because:
-- Files are typically 20–50 MB (exceeds standard GitHub API limits)
-- Files contain personal, health, and family content not appropriate for repository storage
-
-A `BATCH-NNN-STATUS.md` file **must** be committed for every batch regardless of whether the raw JSON is committed. If raw JSON commitment is required for audit purposes, use Git LFS.
-
----
-
-## 6. Conversation Classification
-
-Every conversation in a batch must be assigned to one of the following domains:
-
-| Domain | Description | RFQ-1000+ target range |
-|---|---|---|
-| Estate | Smart home, fit-out, fixtures, outdoor, security, technology systems | RFQ-1000 (sub-RFQs as needed) |
-| Resort / Hospitality | Hotel, bar, guest experience, accommodation | RFQ-1001 |
-| Aviation | Airfield, aircraft operations | TBD |
-| Marina | Watercraft, marina facilities | TBD |
-| Village | Infrastructure, logistics | TBD |
-| Farm / Agricultural | Farming operations, land management | TBD |
-| Vehicles | Fleet, upgrades, audio, modifications | RFQ-1002 |
-| Lifestyle | Fashion, memberships, accessories, food, recreation, arts | RFQ-1003 |
-| Personal / Health / Family | Wellness, children, family, nutrition | RFQ-1005 |
-| Financial | Investment strategy, asset allocation, wealth management | RFQ-1004 |
-| Generational Governance | Family office, succession, trust, estate planning | TBD |
-| Estate — Land | Site search, lot evaluation, location strategy | RFQ-1006 |
-| Pre-Meridian / Irrelevant | Content predating programme or entirely off-topic | No extraction — archive note only |
-
----
-
-## 7. Document ID Assignment (RFQ-1000+ Range)
-
-All ecosystem artefacts extracted from the knowledge base use the **RFQ-1000+** range:
-
-| Range | Scope |
-|---|---|
-| RFQ-0001 – RFQ-0999 | Meridian governance and infrastructure |
-| **RFQ-1000+** | **Meridian ecosystem — all programme domain artefacts** |
-
-**Reserved IDs (do not reassign):**
-- RFQ-1000 — Meridian Estate, Master Smart Home Specification
-- RFQ-1001 — Meridian Resort, Obsidian Hotel Concept
-- RFQ-1002 — Meridian Vehicles, Fleet Specification
-- RFQ-1003 — Meridian Lifestyle
-- RFQ-1004 — Meridian Financial
-- RFQ-1005 — Meridian Personal / Health / Family
-- RFQ-1006 — Meridian Estate, Land Search and Site Selection
-
-All other IDs from RFQ-1007 upward are assigned sequentially as extraction proceeds. New assignments are registered in `knowledge/INGESTION-MANIFEST.md` (§ RFQ-1000+ Register) before extraction begins.
-
----
-
-## 8. Extraction Requirements
-
-Extracted artefacts must:
-1. Have valid A1-compliant YAML frontmatter per `schemas/meridian-a1-markdown-artefact-standard.yaml v1.1`
-2. Carry `status: "Draft"`
-3. Include a `source` frontmatter field referencing source batch(es) and conversation titles
-4. Carry `programme: "Meridian"`
-5. Be committed to `drafts/<document_id>/<document_id>.md`
-6. Be registered in `knowledge/INGESTION-MANIFEST.md`
-7. Be committed on a branch named `draft/<document_id>`
-
-Extracted artefacts must **not** be committed directly to `rfq/`, `rip/`, or any other promoted namespace. They must enter the `drafts/` lifecycle and proceed through the L1→L2A→L2B→L3→Kevin pipeline.
-
----
-
-## 9. Ingestion Workflow
-
-### For each new batch file received:
-
-1. Identify batch number from filename
-2. Create `knowledge/raw-exports/chatgpt/export-<date>/BATCH-NNN-STATUS.md`
-3. Count all conversations; record in BATCH-STATUS
-4. Classify every conversation per §6 table
-5. Update `knowledge/INGESTION-MANIFEST.md` batch row
-6. Identify any new RFQ IDs required; register in INGESTION-MANIFEST § RFQ-1000+ Register
-7. Extract highest-priority artefacts (⭐ Critical first)
-8. Commit BATCH-STATUS and INGESTION-MANIFEST updates to `draft/chatgpt-ingest-<date>` branch
-9. Commit each extracted artefact to its own `draft/<document_id>` branch
-
-### Priority order for extraction:
-
-1. Documents already referenced by ID in other governance artefacts
-2. ⭐ Critical priority conversations (master/consolidated RFQs)
-3. High priority by domain, in the order: Estate → Resort → Vehicles → Financial → Lifestyle → Health → Other
-
----
-
-## 10. Rules for All Agents
-
-**Do:**
-- Follow this standard in full before committing anything to the repository
-- Check `INGESTION-MANIFEST.md` before assigning new RFQ-1000+ IDs
-- Create BATCH-STATUS files for every batch received
-- Use A1-compliant frontmatter on every extracted document
-- Commit extracted artefacts on separate `draft/<document_id>` branches
-
-**Do not:**
-- Invent document IDs not registered in INGESTION-MANIFEST
-- Use non-numeric or descriptive document ID segments (e.g. `RFQ-ESTATE-KITCHEN` is invalid)
-- Create files in `rfq/` directly from ingested content
-- Create non-standard directories outside the defined structure
-- Commit raw JSON exports without Estate Principal authorisation
-- Reference standards that do not exist
-- Create stub files without frontmatter and register them as completed artefacts
-
----
-
-## 11. Amendment History
+## Amendment History
 
 | Version | Date | Author | Change |
 |---|---|---|---|
-| 1.0 | 2026-06-28 | Claude (L2A) | Initial standard — replaces non-compliant STD-CHAT-INGEST-0001 stub |
+| 1.0 | 2026-06-28 | Claude (L2A) | Initial standard |
+| 1.1 | 2026-06-28 | Claude (L2A) | Pipeline architecture updated per Kevin instruction: Grok parallel ingestion; Copilot/Codex review layer; direct rfq/ posting authorised |
+
+---
+
+## 1. Purpose
+
+This standard governs the ingestion of ChatGPT conversation export files into the Meridian Knowledge Base and the extraction and formatting of programme artefacts from those exports into the `rfq/` directory tree.
+
+---
+
+## 2. Pipeline Architecture (v1.1)
+
+```
+ChatGPT conversation exports (40 files)
+        ↓ treated as L1 raw drafts
+        ↓
+┌────────────────────────┐
+│ Claude (L2A) + Grok   │  ←─ parallel review + amend
+└────────────────────────┘
+        ↓ valid A1-compliant documents
+        ↓
+  rfq/<domain>/<subdomain>/
+        ↓
+ GitHub Copilot + Codex  ←─ when configured
+        ↓
+     Grok (L3)           ←─ consolidation + adjudication
+        ↓
+     Kevin               ←─ final approval
+```
+
+**Kevin-authorised deviation from RFQ-0100:** Validated documents are posted directly to `rfq/` subdirectories (not routed through `drafts/` lifecycle). Reason: ChatGPT conversation exports are treated as L1 raw drafts; Claude and Grok perform the review-and-amend function that normally separates L1 from rfq/ promotion. All documents must carry a `kevin_authorisation` field in frontmatter.
+
+---
+
+## 3. Scope
+
+Applies to all 40 ChatGPT JSON conversation export files provided by the Estate Principal (Batches 000–039). Applies to all ingesting agents: Claude (L2A), Grok, GitHub Copilot, GitHub Codex.
+
+---
+
+## 4. Ingesting Agents
+
+| Agent | Role |
+|---|---|
+| Claude (L2A) | Independent reviewer — review, amend, and post to rfq/ |
+| Grok | Parallel ingestion — same scope as Claude; also consolidation/adjudication (L3) |
+| GitHub Copilot | Code and document review when connected |
+| GitHub Codex | Extended code/document review when connected |
+| Kevin | Estate Principal — sole final approval authority |
+
+**Coordination rule:** Claude and Grok should not duplicate documents. Before creating a document, agents should check the `rfq/` tree for an existing file on the same topic. If a file exists, create a `REV-L2A-` or `REV-L3-` review artefact rather than a duplicate document.
+
+---
+
+## 5. rfq/ Directory Structure
+
+All extracted documents go to `rfq/` subdirectories reflecting domain and topic:
+
+```
+rfq/
+  estate/
+    home-theatre/          # Theatre projector, audio, processing, seating, screens
+    smart-home/            # KNX, Josh.ai, Basalte, mmWave, Lutron
+    av-distribution/       # Whole-home audio and video (Focal, Naim CI, displays)
+    kitchen/               # Appliances, tapware, butler's pantry, bar, wine
+    bathrooms/             # Tapware, toilets, wellness, body dryers
+    bedrooms/              # Beds, dressing suites, linen
+    living/                # Lounge, games, office, additional rooms
+    structure/             # Cladding, glazing, roofing, bushfire protection
+    hvac/                  # Hydronic, HVAC, ventilation, air quality
+    garage/                # Structure, doors, EV charging, car wash
+    outdoor/               # Pool, pavilion, outdoor kitchen, landscape
+    security/              # Access control, surveillance, safe room
+    energy/                # Solar, battery, hydrogen, smart energy
+    network/               # Connectivity, infrastructure, NAS
+    wellness/              # Dedicated wellness suite, sauna, cold plunge
+  resort/
+    hotel/                 # Obsidian Hotel concept
+    bar/                   # Hotel bar
+    hospitality/           # Hotel operations, storage, tech
+  vehicles/
+    bentley/               # Continental GT, Bentayga
+    motorcycles/           # Triumph Rocket 3, Harley
+    ev/                    # EV fleet selection
+  lifestyle/
+    fashion/               # Wardrobe, clothing, accessories
+    memberships/           # Australia-wide memberships
+    recreation/            # Camping, leisure, music
+    dining/                # Restaurants, food
+  health-family/
+    nutrition/             # Meal planning, supplements, family health
+    wellness/              # Personal wellness
+  financial/
+    investment/            # Investment strategy
+  land/
+    site-selection/        # Forest Range lot, land search
+```
+
+---
+
+## 6. Knowledge Base Directory (Raw Intake)
+
+The `knowledge/` directory remains the raw intake and archive layer. It does NOT contain governance artefacts. See `knowledge/README.md`.
+
+---
+
+## 7. Conversation Classification
+
+Every conversation in a batch must be classified to a domain and subdomain per the `rfq/` tree above. See `knowledge/raw-exports/chatgpt/export-2026-06-27/BATCH-000-STATUS.md` for Batch 000 classifications.
+
+---
+
+## 8. Document Standards
+
+Every document posted to `rfq/` must:
+
+1. Have A1-compliant YAML frontmatter (all required fields present)
+2. Carry `status: "Draft"` unless Kevin has approved
+3. Include `kevin_authorisation` field confirming Estate Principal authorised direct rfq/ posting
+4. Include `source_batch` and `source_conversations` fields
+5. Include `reviewed_by` field naming the ingesting agent
+6. Be in Australian English
+7. Reference the source conversation content accurately
+8. Not include personally identifiable information that Kevin has not approved for repository storage
+
+---
+
+## 9. Document ID Convention for Sub-Domain Documents
+
+The A1 schema pattern `^(RFQ|RIP|...)-\d{4}$` does not accommodate sub-document IDs. Pending A1 schema extension, use the following provisional convention:
+
+- Sub-domain documents within `rfq/estate/home-theatre/` etc. carry a `document_id` in the format `RFQ-1000-[DOMAIN-CODE]-[SEQ]`, e.g. `RFQ-1000-HT-001`
+- These are explicitly flagged as provisional in the `note` frontmatter field
+- All IDs must be registered in `knowledge/INGESTION-MANIFEST.md` (§ RFQ-1000+ Register)
+
+---
+
+## 10. Workflow Per Batch
+
+1. Agent receives export file
+2. Check `knowledge/INGESTION-MANIFEST.md` for batch number and existing extractions
+3. Create/update `knowledge/raw-exports/chatgpt/export-<date>/BATCH-NNN-STATUS.md`
+4. Classify all conversations per §7
+5. Check `rfq/` tree for existing documents on same topics before creating new ones
+6. Extract, review, and amend content into A1-compliant documents
+7. Commit to `draft/chatgpt-ingest-<date>` branch (or agent's own ingest branch)
+8. Update `INGESTION-MANIFEST.md` § RFQ-1000+ Register with any new document IDs
+
+---
+
+## 11. Rules for All Agents
+
+**Do:**
+- Check for existing rfq/ documents before creating new ones
+- Use A1-compliant frontmatter with all required fields
+- Include `kevin_authorisation` field on every document
+- Register all document IDs in INGESTION-MANIFEST
+- Flag provisional document IDs with `note` field
+- Coordinate with other agents via INGESTION-MANIFEST
+
+**Do not:**
+- Duplicate an existing rfq/ document
+- Post raw conversation content without review and amendment
+- Invent specifications not present in the source conversations
+- Include personal health, family, or financial information Kevin has not approved
+- Commit directly to `main` without Kevin review
