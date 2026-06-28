@@ -1,1 +1,0 @@
-A1 formatted health twin architecture from conversations
