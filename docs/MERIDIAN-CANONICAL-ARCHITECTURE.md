@@ -1,4 +1,15 @@
-# Meridian Canonical Architecture Draft (MCA-001)
+---
+document_id: "RFQ-0101"
+title: "Meridian Canonical Architecture"
+version: "0.1"
+status: "Draft"
+classification: "Governance / Repository Definition"
+date: "2026-06-23"
+programme: "Meridian"
+author: "Human Author"
+---
+
+# Meridian Canonical Architecture Draft (RFQ-0101)
 ## Version 0.1 — Unified Intelligence + Governance Model
 
 ---
