@@ -11,10 +11,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: OPA Policy Check
         uses: open-policy-agent/conftest-action@v0.1.0
         with:
           policy: governance/policies
-          files: rfq/*.md
+          # Recursively match all .md files under rfq/ (including subdirectories)
+          files: rfq/**/*.md rfq/*.md
+
       - name: Schema Validation
-        run: echo "TODO: Full JSON Schema + Markdown validation"
+        run: |
+          echo "TODO: Full JSON Schema + Markdown validation"
+          echo "NOTE: validate_schemas.py covers this once MERIDIAN_KEY secret is set."

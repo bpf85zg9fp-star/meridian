@@ -1,71 +1,83 @@
+import os
 import json
-import hashlib
+import uuid
 import hmac
+import hashlib
 from datetime import datetime, timezone
-from scripts.vault_kms import VaultKMS
+from scripts.key_management import KeyManager
+
+# ---------------------------------------------------------------------------
+# Uses KeyManager — reads MERIDIAN_KEY from environment.
+# For production, replace KeyManager with scripts/vault_kms.py VaultKMS.
+# ---------------------------------------------------------------------------
+
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+CHAIN_STORE_DIR = os.path.join(REPO_ROOT, "event_store")
+
+_km = KeyManager()
 
 
 class SignedEventChain:
-    """Implements hash-linked event chaining for tamper-evident governance logs."""
+    """Linked-hash chain: each event includes the signature of its predecessor."""
 
     def __init__(self):
-        self.vault = VaultKMS()
+        os.makedirs(CHAIN_STORE_DIR, exist_ok=True)
 
-    def _hash_event(self, event: dict) -> str:
-        payload = json.dumps(event, sort_keys=True).encode("utf-8")
-        return hashlib.sha256(payload).hexdigest()
+    def _get_path(self, chain_id: str) -> str:
+        safe = chain_id.replace("/", "_").replace("\\", "_")
+        return os.path.join(CHAIN_STORE_DIR, f"{safe}.chain.jsonl")
 
-    def _hmac(self, data: str) -> str:
-        key = self.vault.get_primary_key().key_material
-        return hmac.new(key, data.encode("utf-8"), hashlib.sha256).hexdigest()
+    def _sign(self, payload: str) -> str:
+        raw_key = _km.get_key()
+        key_bytes = raw_key.encode() if isinstance(raw_key, str) else raw_key
+        return hmac.new(key_bytes, payload.encode("utf-8"), hashlib.sha256).hexdigest()
 
-    def sign_chain(self, events: list) -> list:
-        """Adds hash chaining + HMAC signature to event stream."""
-
-        prev_hash = "GENESIS"
-        signed = []
-
-        for e in events:
-            event_copy = dict(e)
-
-            event_hash = self._hash_event(event_copy)
-
-            chain_input = prev_hash + event_hash
-            signature = self._hmac(chain_input)
-
-            event_copy["event_hash"] = event_hash
-            event_copy["prev_hash"] = prev_hash
-            event_copy["chain_signature"] = signature
-
-            prev_hash = event_hash
-            signed.append(event_copy)
-
-        return signed
-
-    def verify_chain(self, events: list) -> bool:
-        prev_hash = "GENESIS"
-
-        for e in events:
-            expected_hash = self._hash_event({k: v for k, v in e.items() if k not in ["event_hash", "prev_hash", "chain_signature"]})
-
-            if e.get("event_hash") != expected_hash:
-                return False
-
-            chain_input = prev_hash + expected_hash
-            expected_sig = self._hmac(chain_input)
-
-            if e.get("chain_signature") != expected_sig:
-                return False
-
-            prev_hash = expected_hash
-
-        return True
-
-    def certify_replay(self, events: list) -> dict:
-        valid = self.verify_chain(events)
-
-        return {
-            "valid": valid,
-            "event_count": len(events),
-            "certified_at": datetime.now(timezone.utc).isoformat()
+    def append(self, chain_id: str, event_type: str, payload: dict) -> dict:
+        path = self._get_path(chain_id)
+        prev_sig = self._get_last_sig(path)
+        event = {
+            "event_id": str(uuid.uuid4()),
+            "chain_id": chain_id,
+            "event_type": event_type,
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "payload": payload or {},
+            "prev_sig": prev_sig,
         }
+        body = json.dumps(event, sort_keys=True)
+        sig = self._sign(body)
+        record = {"event": event, "sig": sig}
+        with open(path, "a", encoding="utf-8") as f:
+            f.write(json.dumps(record) + "\n")
+        return event
+
+    def _get_last_sig(self, path: str) -> str:
+        if not os.path.exists(path):
+            return "genesis"
+        last = None
+        with open(path, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if line:
+                    last = json.loads(line)
+        return last["sig"] if last else "genesis"
+
+    def verify_chain(self, chain_id: str) -> bool:
+        """Walk the chain; return False on first tamper/break detected."""
+        path = self._get_path(chain_id)
+        if not os.path.exists(path):
+            return True
+        prev_sig = "genesis"
+        with open(path, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                record = json.loads(line)
+                event = record["event"]
+                if event.get("prev_sig") != prev_sig:
+                    return False
+                body = json.dumps(event, sort_keys=True)
+                if not hmac.compare_digest(record["sig"], self._sign(body)):
+                    return False
+                prev_sig = record["sig"]
+        return True

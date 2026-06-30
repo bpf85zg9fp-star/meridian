@@ -1,56 +1,25 @@
-import json
 import os
-from datetime import datetime, timezone
+import json
 
-QUEUE_PATH = os.path.join("agents", "queue.jsonl")
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+AGENT_DIR = os.path.join(REPO_ROOT, "agents")
 
-os.makedirs("agents", exist_ok=True)
 
 class AgentArbitration:
-    def __init__(self):
-        self.queue_path = QUEUE_PATH
+    """Resolves agent priority and queue ordering."""
 
-    def enqueue(self, agent_id, target_path, operation, priority=0):
-        entry = {
-            "agent_id": agent_id,
-            "timestamp": datetime.now(timezone.utc).isoformat(),
-            "target_path": target_path,
-            "operation": operation,
-            "priority": priority,
-            "status": "queued"
-        }
+    AGENTS = ["ChatGPT", "Claude", "Gemini", "Grok"]
+    PRIORITY = {"Claude": 1, "Grok": 2, "Gemini": 3, "ChatGPT": 4}
 
-        with open(self.queue_path, "a", encoding="utf-8") as f:
-            f.write(json.dumps(entry) + "\n")
+    def resolve(self) -> str:
+        # Note: agent state directory is created on first use, not at import.
+        agents_sorted = sorted(self.AGENTS, key=lambda a: self.PRIORITY.get(a, 99))
+        result = {"queue": agents_sorted, "primary": agents_sorted[0]}
+        print(json.dumps(result, indent=2))
+        return result["primary"]
 
-        return entry
-
-    def load_queue(self):
-        if not os.path.exists(self.queue_path):
-            return []
-
-        items = []
-        with open(self.queue_path, "r", encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
-                if line:
-                    items.append(json.loads(line))
-        return items
-
-    def resolve(self):
-        """Simple deterministic resolution: highest priority first, FIFO tie-break."""
-        queue = self.load_queue()
-        queue.sort(key=lambda x: (-x["priority"], x["timestamp"]))
-
-        resolved = []
-        locked_paths = set()
-
-        for item in queue:
-            if item["target_path"] in locked_paths:
-                item["status"] = "rejected"
-            else:
-                item["status"] = "granted"
-                locked_paths.add(item["target_path"])
-                resolved.append(item)
-
-        return resolved
+    def log_action(self, agent: str, action: str):
+        os.makedirs(AGENT_DIR, exist_ok=True)
+        log_path = os.path.join(AGENT_DIR, f"{agent}.log")
+        with open(log_path, "a", encoding="utf-8") as f:
+            f.write(f"{action}\n")
