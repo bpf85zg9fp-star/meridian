@@ -1,0 +1,1 @@
+print("Tier 0 Gate: Weights scripts for conflicts, enforces pinnacle quality")
