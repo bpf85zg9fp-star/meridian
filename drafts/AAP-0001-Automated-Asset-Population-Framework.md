@@ -1,4 +1,16 @@
-# AAP-0001 — Automated Asset Population & Preference-Only Human Involvement Framework
+---
+document_id: "RFQ-0101"
+title: "Automated Asset Population & Preference-Only Human Involvement Framework"
+version: "0.1"
+status: "Draft"
+classification: "Technical / Implementation"
+date: "2026-06-23"
+programme: "Meridian"
+author: "ChatGPT (Layer 1 Governance Drafting Role)"
+yaml_schema: "meridian-a1-markdown-artefact-standard.yaml v1.1"
+---
+
+# RFQ-0101 — Automated Asset Population & Preference-Only Human Involvement Framework
 
 ## Purpose
 Establish a Meridian-standard architecture where objective asset data is populated automatically while human involvement is restricted to preference definition, weighting and exception approval.
