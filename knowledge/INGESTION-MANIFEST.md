@@ -1,10 +1,10 @@
 ---
 document_id: "KNOWLEDGE-MANIFEST-001"
 title: "Meridian Knowledge Base — Ingestion Manifest"
-version: "1.2"
+version: "1.3"
 status: "Active"
 classification: "Infrastructure / Knowledge Management"
-date: "2026-06-29"
+date: "2026-06-30"
 programme: "Meridian"
 author: "Claude (L2A Independent Reviewer)"
 yaml_schema: "meridian-a1-markdown-artefact-standard.yaml v1.1"
@@ -15,7 +15,7 @@ yaml_schema: "meridian-a1-markdown-artefact-standard.yaml v1.1"
 Master tracking document for all 40 ChatGPT conversation export batches.
 
 **Ingestion standard:** `standards/INGEST-STD-001.md`  
-**Last updated:** 2026-06-29 by Claude (L2A)
+**Last updated:** 2026-06-30 by Claude (L2A)
 
 ---
 
@@ -25,20 +25,33 @@ Master tracking document for all 40 ChatGPT conversation export batches.
 |---|---|---|---|---|
 | 000 | 100 | 66 | ✅ 2026-06-27 | ✅ Complete (25 docs) |
 | 001 | 100 | 93 | ✅ 2026-06-29 | ✅ Complete (12 docs) |
-| 002 | 100 | ~86 | ✅ 2026-06-29 | ⚠️ Priority items complete (13 docs); audit-series and governance-detail items pending — see below |
+| 002 | 100 | ~86 | ✅ 2026-06-29 | ⚠️ Priority items complete (16 docs); audit-series/governance-detail items pending |
 | 003–039 | — | — | ❌ Not received | — |
 
 ---
 
-## ⚠️ Open Critical Findings — Require Kevin's Decision
+## Open Critical Findings
 
-| ID | Finding | Source | Status |
-|---|---|---|---|
-| F-001 | Competing RFQ numbering scheme (ChatGPT's internal 1–14 structure) discovered in Batch 002 "RFQs Overview and Breakdown" (2026-01-10). RFQ-1000+ retained as sole authoritative scheme; ChatGPT's numbering logged as source content only. | Batch 002 | Awaiting Kevin confirmation |
-| F-002 | Home theatre projector conflict: Christie Eclipse G3 (compared, not conclusively selected, Nov 20) vs "Barco Thor+" (referenced as already-locked in Dec 2 / Jan 5 audit conversations). Conflicts with `rfq/estate/home-theatre/Christie-Eclipse.md` already in repository. | Batch 002 | Awaiting Kevin decision |
-| F-003 | Theatre speaker specification conflict: Pro Audio Technology 32-speaker array (RFQ-1000-HT-005, established) vs Ascendo HALO + Wisdom Audio hybrid (explored in "Perlisten vs Focal Audio", Jan 3). | Batch 002 | Awaiting Kevin decision |
-| F-004 | Tow vehicle changed: Bentley Bentayga (RFQ-1013, Batch 001) → Toyota LandCruiser 300 GR Sport (RFQ-1002-002, Batch 002). Trailer model also inconsistent: "Bruder EXP-8" (Batch 001) vs "Bruder EXP-12" (Batch 002). | Batch 001 → 002 | Awaiting Kevin confirmation |
-| F-005 | Battery bank spec increased: 3× Tesla Powerwall 3 (RFQ-1000 §15) vs 9–12× Powerwall 3 (Batch 002 OPEX conversation, "scale-corrected"). | Batch 000 → 002 | Awaiting Kevin confirmation |
+| ID | Finding | Status |
+|---|---|---|
+| F-001 | Competing RFQ numbering scheme (ChatGPT's internal 1–14 structure, Batch 002 "RFQs Overview and Breakdown") | ✅ **RESOLVED 2026-06-30** — Kevin confirmed: this was ChatGPT's own internal numbering only. RFQ-1000+ is the sole authoritative scheme repository-wide. |
+| F-002 | Home theatre projector conflict: Christie Eclipse G3 vs "Barco Thor+" | ⚠️ **INVESTIGATED, NOT YET RESOLVED** — See detail below. All three projector threads (Christie Eclipse, Barco Heimdall+, Barco Thor+) now ingested per Kevin's instruction (2026-06-30). Genuine unresolved conflict remains — Kevin decision required. |
+| F-003 | Theatre speaker conflict: Pro Audio Technology array vs Ascendo HALO + Wisdom Audio hybrid | Awaiting Kevin decision |
+| F-004 | Tow vehicle changed: Bentayga → LandCruiser 300 GR Sport; trailer EXP-8 vs EXP-12 naming inconsistency | Awaiting Kevin confirmation |
+| F-005 | Battery bank spec: 3× vs 9–12× Tesla Powerwall 3 | Awaiting Kevin confirmation |
+
+### F-002 Detail — Projector Conflict (Updated 2026-06-30)
+
+All three projector threads now documented:
+
+| Document | Projector | Status |
+|---|---|---|
+| `rfq/estate/home-theatre/Christie-Eclipse.md` (RFQ-1000-HT-001) | Christie Eclipse G3 | Core spec — originally selected, from Batch 000 |
+| `rfq/estate/home-theatre/Christie-Eclipse-Room-Lens-Booth.md` (RFQ-1000-HT-011) | Christie Eclipse G3 | Detailed room/lens/projection-booth engineering — new from Batch 002, Nov 20 conversation |
+| `rfq/estate/home-theatre/Barco-Heimdall-Plus.md` (RFQ-1000-HT-012) | Barco Heimdall+ | Evaluated against Eclipse in the same Nov 20 conversation, explicitly **not selected** — reference record only |
+| `rfq/estate/home-theatre/Barco-Thor-Plus.md` (RFQ-1000-HT-013) | Barco Thor+ | **Unresolved.** Referenced as an already-locked decision in three Dec/Jan audit conversations, but never actually compared or chosen in any conversation ingested so far. Confirmed via external verification to be a real Barco flagship product (32,000 lumens, 6P RGB laser) — not a naming error, not the same product as Heimdall+. One source indicates the Thor/Thor+ line may have been discontinued September 2025 (unconfirmed — Barco's own site still shows it as active). |
+
+**Key finding:** the only conversation containing an actual technical projector comparison (Nov 20) evaluates Eclipse vs Heimdall+ and results in Eclipse being confirmed. Thor+ never appears there. Its later appearances (Dec 2, Dec 6, Jan 5) all pair it with the exact same downstream chain (Trinnov/madVR/Kaleidescape/Stewart) already established for Eclipse, with no visible decision point. Two working hypotheses are recorded in RFQ-1000-HT-013 §3 — either a genuine decision exists in a not-yet-ingested batch, or this is an L1 (ChatGPT) drafting substitution that was never actually decided. **Kevin's confirmation is required before the home theatre RFQ series can be finalised.** If Thor+ is confirmed as correct, RFQ-1000-HT-011's room/lens/booth engineering (built around Eclipse's specific optical/thermal characteristics) will need rework.
 
 ---
 
@@ -46,55 +59,30 @@ Master tracking document for all 40 ChatGPT conversation export batches.
 
 | ID | Working title | Batch(es) | Status |
 |---|---|---|---|
-| RFQ-1000 | Meridian Estate — Master Smart Home Specification | 000, 001, 002 | ✅ Extracted (master + 15 sub-domain docs) |
+| RFQ-1000 | Meridian Estate — Master Smart Home Specification | 000, 001, 002 | ✅ Extracted (master + 18 sub-domain docs) |
 | RFQ-1001 | Meridian Resort — Obsidian Hotel Concept | 000, 001 | ✅ Extracted |
-| RFQ-1002 | Meridian Vehicles — Fleet Specification | 000, 001, 002 | ✅ Extracted (Bentley fleet + LandCruiser 300 GR Sport) |
-| RFQ-1003 | Meridian Lifestyle — Fashion, Recreation, Memberships | 000 | ✅ Extracted |
+| RFQ-1002 | Meridian Vehicles — Fleet Specification | 000, 001, 002 | ✅ Extracted |
+| RFQ-1003 | Meridian Lifestyle | 000 | ✅ Extracted |
 | RFQ-1004 | Meridian Financial — Investment Strategy | 000 | ✅ Extracted |
 | RFQ-1005 | Meridian Personal / Health / Family | 000 | ✅ Extracted |
-| RFQ-1006 | Meridian Estate — Land Search and Site Selection | 000 | ✅ Extracted |
-| RFQ-1007 | Meridian Marina — 55m Ultra-Luxury Expedition Yacht | 001, 002 | ✅ Extracted; autonomy/expedition detail from Batch 002 ("Yacht ownership opportunities") not yet merged — pending |
-| RFQ-1008 | Meridian Aviation — Gulfstream G700 VVIP Completion | 001 | ✅ Extracted |
+| RFQ-1006 | Meridian Estate — Land Search | 000 | ✅ Extracted |
+| RFQ-1007 | Meridian Marina — Yacht | 001, 002 | ✅ Extracted; autonomy detail pending |
+| RFQ-1008 | Meridian Aviation — Gulfstream G700 | 001 | ✅ Extracted |
 | RFQ-1009 | Meridian Vehicles — Custom Build | 001 | ✅ Extracted |
-| RFQ-1010 | Meridian Resort — Hotel App Technology Stack & Security | 001, 002 | ✅ Extracted; Batch 002 "Hotel software recommendations" (autonomous-operations concept) not yet merged — pending |
-| RFQ-1011 | Meridian Financial — Day One Cost & 5-Year Lifecycle Model | 001, 002 | ✅ Extracted; RFQ-1011-002 (Weekly OPEX) partial — water/internet/food sub-totals incomplete in source |
-| RFQ-1012 | Meridian Resort — Hotel Staffing | 001 | ⏳ Reserved — not yet extracted |
-| RFQ-1013 | Meridian Lifestyle — 435-Day Family Touring | 001, 002 | ⚠️ Needs update — tow vehicle changed (see F-004) |
+| RFQ-1010 | Meridian Resort — Hotel App Tech Stack | 001, 002 | ✅ Extracted; autonomous-ops concept pending |
+| RFQ-1011 | Meridian Financial — Day One Cost & Lifecycle | 001, 002 | ✅ Extracted; OPEX sub-totals partial |
+| RFQ-1012 | Meridian Resort — Hotel Staffing | 001 | ⏳ Reserved |
+| RFQ-1013 | Meridian Lifestyle — 435-Day Touring | 001, 002 | ⚠️ Needs update (F-004) |
 | RFQ-1014 | Meridian Estate — Build Team, PM & Timeline | 002 | ✅ Extracted |
-| RFQ-1015 | Meridian Estate — Operating Framework (Governance) | 002 | ✅ Extracted (summary level) |
+| RFQ-1015 | Meridian Estate — Operating Framework | 002 | ✅ Extracted (summary) |
 | RFQ-1016–1017 | Unassigned | — | Available |
-| RFQ-1018 | Meridian Estate — Quality Audit Series (materials/furniture/appliances/wardrobe/linen) | 002 | ⏳ Reserved — not yet extracted (5 source conversations, largely upgrade-suggestions on already-specified items) |
-| RFQ-1019 | Meridian Estate — Colour & Brick Palette | 002 | ⏳ Reserved — not yet extracted |
-| RFQ-1020 | Meridian Estate — De-Branding Framework | 002 | ⏳ Reserved — not yet extracted |
+| RFQ-1018 | Meridian Estate — Quality Audit Series | 002 | ⏳ Reserved |
+| RFQ-1019 | Meridian Estate — Colour & Brick Palette | 002 | ⏳ Reserved |
+| RFQ-1020 | Meridian Estate — De-Branding Framework | 002 | ⏳ Reserved |
 | RFQ-1021+ | TBD | — | Not assigned |
-
----
-
-## Batch 002 — Detail
-
-**Status file:** `knowledge/raw-exports/chatgpt/export-2026-06-27/BATCH-002-STATUS.md`  
-**Date range:** 2025-11-16 to 2026-01-11  
-**Documents committed:** 13 (BATCH-002-STATUS + 4 RFQ documents in first pass + RFQ-1015 + this manifest)  
-**Explicitly pending within Batch 002** (lower priority — mostly refinements to already-specified items rather than new information):
-- RFQ-1018: Materials audit, furniture audit, appliance audit, wardrobe audit (×2), linen audit — 5 source conversations
-- RFQ-1019: Estate colour/brick palette (Kolumba brick selection detail)
-- RFQ-1020: De-branding framework (full vessel/supplier detail)
-- RFQ-1000-HT: Infrasonic bass tuning curve detail ("Infrasonic Bass Capability", Dec 28)
-- RFQ-1007: Yacht autonomy/expedition systems detail ("Yacht ownership opportunities", Nov 17)
-- RFQ-1010: Autonomous hotel operations concept ("Hotel software recommendations", Nov 29)
-- RFQ-1014: UpKeep/ArcGIS/Trainual/Deputy licensing cost detail
-
-**Kevin has indicated these pending items are acceptable to leave until the cleanup phase** given the "extract everything, organise later" instruction — logged here so nothing is lost track of.
 
 ---
 
 ## Known Cross-Agent Duplication (Not Yet Resolved)
 
-Per Kevin's instruction (2026-06-29), duplicates between Claude and Grok's parallel ingestion are acceptable during the extraction phase:
-
-- `Mozaex-Digital-Marquees.md` (Claude) vs `Mozaex-Digital-Marquee.md` (Grok)
-- `Focal-Naim-CI-Audio.md` (Claude) vs `Focal-Naim-CI.md` (Grok)
-- Smart-home backbone: Claude's combined `KNX-Josh-Basalte.md` vs Grok's split files
-- Structure: Claude's `Cladding-Glazing-Bushfire-Energy.md` vs Grok's `Cladding-Materials.md`
-
-Addressed in the cleanup/consolidation phase.
+Per Kevin's instruction (2026-06-29), duplicates between Claude and Grok's parallel ingestion are acceptable during the extraction phase — addressed in the cleanup/consolidation phase.
