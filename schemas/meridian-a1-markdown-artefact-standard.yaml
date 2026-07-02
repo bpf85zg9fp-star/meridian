@@ -120,6 +120,23 @@ properties:
     description: "List of related document identifiers or titles"
     minItems: 0
 
+  dependencies:
+    type: array
+    description: "Component-level dependencies for sequencing (non-blocking; drives suggestion generation in dependency_resolver.py, not a hard gate on its own)"
+    items:
+      type: object
+      required:
+        - component
+      properties:
+        component:
+          type: string
+          description: "The component or system this document/section concerns"
+        requires:
+          type: array
+          items:
+            type: string
+          description: "Other components or artefacts this component depends on"
+
   continuum_scope:
     type: object
     description: "Continuum governance scope metadata (optional)"

@@ -1,0 +1,6 @@
+{
+  "_note": "Illustrative starting values only. Not validated. Set approved:true only after you (or a qualified consultant) have signed off on these weights.",
+  "approved": false,
+  "metrics": { "schema_compliance": 0.4, "gap_density": 0.35, "synergy_overlap": 0.25 },
+  "pass_threshold": 0.7
+}
